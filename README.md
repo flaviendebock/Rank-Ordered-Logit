@@ -1,4 +1,4 @@
-[README.md](https://github.com/user-attachments/files/30387747/README.md)
+
 # Rank-Ordered Logit from Scratch, with Unobserved Ranking Heterogeneity
 
 This repository contains two companion documents that build a Rank-Ordered
