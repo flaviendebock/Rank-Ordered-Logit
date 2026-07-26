@@ -14,16 +14,14 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 The purpose of this document is to present the mathematics underlying the Rank Ordered Logit of Beggs, Cardell, and Hausman (1981), and to show how every quantity involved (the log-likelihood, the gradient, the Hessian, the maximum likelihood estimates, their standard errors, and various post-estimation quantities such as counterfactual probabilities and the log-sum) can be computed and estimated using only base R, without relying on the `apollo` package. 
 
-Specifically, this document replicates the drugChoice example presented in the `apollo` package documentation, reconstructing all of its main results.
-
-# The Rankd Ordered Logit (ROL)
+# The Rank Ordered Logit (ROL)
 
 Researchers often create surveys where respondents are asked to rank some alternatives. This could be stated preferences over transportation modes, brands, etc. The ROL model is the standard way to analyze preferences in such context. 
 
 The setup is the following: there are $j=1,\ldots,J$ alternatives that are ranked by $i=1,\ldots,N$ respondents. 
 These alternatives are associated with respondent utilities $U_{ij}, \ \forall \ i,j$. 
 
-Because preferences are assumed to be known by the respondents but not the researcher, the random utility framework of Manski (1977) is used. The specification for the random utilities is the following:
+Because preferences are assumed to be known by the respondents but are not known the researcher, the random utility framework of Manski (1977) is used. The specification for the random utilities is the following:
 
 $$U_{ij} = V_{ij} + \varepsilon_{ij},$$
 
@@ -75,7 +73,7 @@ To capture this unability of ranking less desired alternatives, respondents are 
 The random utility is generated from the following DGP:
 
 
-$$U_{ij} = \beta_{0j} + x_{i1}\beta_{1j}+x_{i2}\beta_{2j} + \epsilon_{ij} \ ; \  j =1,\ldots,4 \ ; \ i = 1,\ldots, N \ ; \ \epsilon_{ij}\sim \text{EV1} \ \text{(iid)},$$
+$$U_{ij} = \beta_{0j} + x_{i1}\beta_{1j}+x_{i2}\beta_{2j} + \epsilon_{ij} \ ; \  j =1,\ldots,4 \ ; \ i = 1,\ldots, 1000 \ ; \ \epsilon_{ij}\sim \text{EV1} \ \text{(iid)},$$
 where $x_{i1}$ is standard normal and $x_{i2}$ is a dummy equal to 1 with probability 1/2. 
 
 Because only differences in utility matter, the coefficients of one alternative need to be normalized. The fourth category is therefore taken as the reference with $\beta_{k4} = 0 \ \forall \ k = 0,1,2$. 
@@ -89,11 +87,11 @@ To compare the estimates from the ROL model with the true value of the paramater
 # The Newton-Raphson algorithm                                                                                                                                                                              
                                                                                                                     Newton-Raphson maximizes $\ell(\boldsymbol{\beta})$ iteratively by repeatedly approximating it with a local quadratic expansion around the current parameter value $\boldsymbol{\beta}^{(t)}$, and moving to the point that maximizes this approximation. Since $\boldsymbol{\mathcal{H}}(\boldsymbol{\beta})$ as defined above is the log-likelihood Hessian, the update rule is
                                                                                                                       
-$$ \boldsymbol{\beta}^{(t+1)} = \boldsymbol{\beta}^{(t)} + \left[\boldsymbol{H}(\boldsymbol{\beta}^{(t)})\right]^{-1}\boldsymbol{g}(\boldsymbol{\beta}^{(t)}).$$                                                                                                                      
+$$ \boldsymbol{\beta}^{(t+1)} = \boldsymbol{\beta}^{(t)} + \left[\boldsymbol{\mathcal{H}}(\boldsymbol{\beta}^{(t)})\right]^{-1}\boldsymbol{g}(\boldsymbol{\beta}^{(t)}).$$                                                                                                                      
                                                                                                                      The algorithm is initialized at $\boldsymbol{\beta}^{(0)} = \boldsymbol{0}$ and iterates until the parameter update falls below a small tolerance threshold, i.e. $\max_k |\beta_k^{(t+1)} - \beta_k^{(t)}| < \text{tol}$. Because the ROL log-likelihood is globally concave and here we use the *exact* analytical gradient and Hessian (rather than numerical or quasi-Newton approximations), the algorithm typically converges in only a handful of iterations to the unique maximum likelihood estimate $\hat{\boldsymbol{\beta}}$.
                           
 # Variance matrix and standard errors                                                                                                                     
-Under  standard regularity conditions and a correctly specified model, the maximum likelihood estimator $\hat{\boldsymbol{\beta}}$ is asymptotically normal with variance-covariance matrix equal to the inverse of the (expected) Fisher information matrix,                                                                               
+Under  standard regularity conditions and a correctly specified model, the maximum likelihood estimator $\hat{\boldsymbol{\beta}}$ is asymptotically normal with variance-covariance matrix equal to the inverse of the (expected) Fisher information matrix. This is estimated by:                                                                               
                                                                                                                     
 $$ \text{Var}(\hat{\boldsymbol{\beta}}) \approx \left[\boldsymbol{\mathcal{H}}(\hat{\boldsymbol{\beta}})\right]^{-1}.
 $$                                                                                                                      
