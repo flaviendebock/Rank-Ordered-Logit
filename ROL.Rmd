@@ -59,7 +59,7 @@ Again, it is straightforward to show that the $K$ by $K$ Hessian matrix has the 
 $$\boldsymbol{\mathcal{H}}\left(\boldsymbol{\beta}\right) =- \boldsymbol{\nabla}_{\boldsymbol{\beta}\boldsymbol{\beta}'}\ell\left(\boldsymbol{\beta}\right) = \sum_{i=1}^N\sum_{j=1}^{J-1}\sum_{l=j}^JP_{ir_{il}|j}\left(\boldsymbol{x}_{ir_{il}}-\sum_{k=j}^J\boldsymbol{x}_{ir_{ik}}P_{ir_{ik}|j}\right)\boldsymbol{x}_{ir_{il}}'$$
 
 
-## Application to the drugChoice Data
+## Monte Carlo Simulation
 
 
 
